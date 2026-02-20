@@ -1,0 +1,21 @@
+name: flowerapp
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip
+  - pytorch=2.4.0
+  - torchvision
+  - torchaudio
+  - pip:
+      - sentence-transformers==2.2.2
+      - tokenizers==0.13.3
+      - gradio==4.19.2
+      - pyyaml
+      - numpy
+      - pillow
+      - scikit-learn
+      - tqdm
