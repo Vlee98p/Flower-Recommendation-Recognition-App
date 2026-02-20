@@ -1,0 +1,21 @@
+yaml_text = """ 
+train: /kaggle/input/flowers-dataset/train/images 
+val: /kaggle/input/flowers-dataset/valid/images
+
+nc: 10
+
+names:
+  0: rose
+  1: tulip
+  2: daisy
+  3: sunflower
+  4: dandelion
+  5: orchid
+  6: lily
+  7: hibiscus
+  8: lavender
+  9: peony
+"""
+
+with open("/kaggle/working/flowers.yaml", "w") as f: 
+  f.write(yaml_text)
