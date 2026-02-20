@@ -31,15 +31,19 @@ git clone git@github.com:Vlee98p/Flower-Recommendation-Recognition-App.git
 ```
 
 2. **Install dependencies**
+
 Navigate to the root of this project and run the following command line
 ```
+conda env create -f environment.yml
+conda activate flowerapp
 pip install -r requirements.txt
 ```
 
 3. **Launch the App**
+
 Run following command line to run the Gradio interface
 ```
-python app.py
+python src/app.py
 ```
 
 ## Developer Notes
