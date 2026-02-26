@@ -5,6 +5,6 @@ sentence-transformers
 huggingface-hub
 transformers
 numpy<2
-gradio
+gradio==5.20.0
 pillow
 # force rebuild

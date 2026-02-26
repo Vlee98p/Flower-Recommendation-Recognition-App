@@ -2,7 +2,7 @@
 title: flower-recommendation-recognition-app
 app_file: src/app.py
 sdk: gradio
-sdk_version: 4.44.1
+sdk_version: 5.20.0
 ---
 
 # 🌸 Welcome to Flower Recommendation & Recognition App
