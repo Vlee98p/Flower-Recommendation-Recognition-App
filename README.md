@@ -2,7 +2,7 @@
 title: lower-recommendation-recognition-app
 app_file: src/app.py
 sdk: gradio
-sdk_version: 5.20.0
+sdk_version: 4.44.1
 ---
 
 # 🌸 Welcome to Flower Recommendation & Recognition App
@@ -51,6 +51,26 @@ Run following command line to run the Gradio interface
 ```
 python src/app.py
 ```
+## 👩🏻‍💻 Model Details
+### Supervised Model (Pre-trained)
+The flower recognition model is built on **EfficientNet-B0**, a pre-trained CNN from torchvision. Rather than training from scratch, the pre-trained ImageNet weights are leveraged and only the classifier head is replaced with a custom layer (`Linear(1280→64) → ReLU → Dropout → Linear(64→10)`).
+
+Training was done in three stages of progressive fine-tuning:
+1. All backbone layers frozen — only the classifier head trained (~80% validation accuracy)
+2. Last block (`features.6`) unfrozen with a small learning rate — accuracy improved to ~91% but showed signs of overfitting
+3. Two blocks (`features.5` and `features.6`) unfrozen with differential learning rates — stabilized at ~90% accuracy with no overfitting
+
+The final model was selected based on generalization performance rather than peak accuracy.
+
+### Unsupervised Model (Sentence Embeddings)
+The bouquet recommendation system uses **`all-MiniLM-L12-v2`** from Sentence Transformers. Each flower entry in the dataset is represented as a rich text description combining its name, occasion, emotion, colors, and composition. These descriptions are encoded into dense vectors and stored as precomputed embeddings (`class_embs.pt`).
+
+At inference time, the user's natural language query is encoded and compared against all flower embeddings using **cosine similarity**. The top 2 most semantically similar bouquets are returned as recommendations. No labeled training data is required — the model relies entirely on the semantic understanding built into the pre-trained transformer.
+
+## Dataset
+`Flower Classification | 10 Classes |` dataset from Kaggle is used.
+
+## Results
 
 ## Developer Notes
 - `Text Embeddings`: Generated using Sentence Transformers to map user input to flower descriptions.
