@@ -7,17 +7,19 @@ import torch.nn as nn
 from torchvision import transforms
 import traceback
 from PIL import Image
+import os
 
 # Load your models
 #sentence embedding
-with open("flower_labels.json") as f:
+with open("config/flower_labels.json") as f:
     flower_classes = json.load(f)
 
-with open("flower_colour.json") as f:
+with open("config/flower_colour.json") as f:
     flower_colour = json.load(f)
 
 embedding_model = SentenceTransformer("all-MiniLM-L12-v2")
-class_embs = embedding_model.encode(flower_classes, convert_to_tensor=True) #torch.load("class_embs.pt", map_location="cpu")
+class_embs = embedding_model.encode(flower_classes, convert_to_tensor=True)
+
 
 def recommend_bouquet(text):
     try:
@@ -54,7 +56,7 @@ def load_cnn_model():
     )
 
     # Load your trained weights
-    state_dict = torch.load("cnn_flower_classifier.pth", map_location="cpu")
+    state_dict = torch.load("models/cnn_flower_classifier.pth", map_location="cpu")
     model.load_state_dict(state_dict)
 
     model.eval()
@@ -97,10 +99,41 @@ def classify_flower(file_obj):
         return f"❌ **Internal error:** {e}"
 
 
-with gr.Blocks() as demo:
-    gr.Markdown("# 🌸 Flower Recommendation & Recognition App")
+# Add this near the top of your app.py
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+gif_path_s = os.path.join(BASE_DIR, "assets", "Sunflowers.gif")
+gif_path_t = os.path.join(BASE_DIR, "assets", "Tulip.gif")
+
+with gr.Blocks(css="""
+    .gradio-container {
+        max-width: 700px !important;
+        min-width: 700px !important;
+        margin: auto !important; """) as demo:
+    gr.Markdown("# 🌸 Flower Recommendation & Recognition App 🌸")
 
     with gr.Column(scale=4):
+    
+        gr.HTML(f'''
+            <div style="position:relative; height:0;">
+                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:250px;">
+                <img src="/file={gif_path_t}" width="35" style="position:absolute; top:10px; left:300px;">
+
+                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:310px;">
+                <img src="/file={gif_path_t}" width="35" style="position:absolute; top:10px; left:360px;">
+
+                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:370px;">
+                <img src="/file={gif_path_t}" width="35" style="position:absolute; top:10px; left:420px;">
+
+                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:430px;">
+                <img src="/file={gif_path_t}" width="35" style="position:absolute; top:10px; left:480px;">
+
+                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:490px;">
+                <img src="/file={gif_path_t}" width="35" style="position:absolute; top:10px; left:540px;">
+
+                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:550px;">
+            </div>
+        ''')
+
         with gr.Tabs():
             with gr.Tab("Text to Bouquet"):
                 with gr.Row():
@@ -118,6 +151,7 @@ with gr.Blocks() as demo:
                         )
 
             with gr.Tab("Image to Flower"):
+                #gr.HTML(f'<div style="text-align:center;"><img src="/file={gif_path}" width="100"></div>')
                 img_file = gr.File(file_types=["image"])
                 with gr.Row():
                     with gr.Column():
@@ -130,4 +164,4 @@ with gr.Blocks() as demo:
                             outputs=img_output
                         )
   
-demo.launch()
+demo.launch(allowed_paths = [os.path.join(BASE_DIR, "assets")], share=True)
