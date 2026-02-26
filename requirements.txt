@@ -7,3 +7,4 @@ transformers
 numpy<2
 gradio
 pillow
+# force rebuild
