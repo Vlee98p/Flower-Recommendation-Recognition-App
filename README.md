@@ -1,5 +1,5 @@
 ---
-title: lower-recommendation-recognition-app
+title: flower-recommendation-recognition-app
 app_file: src/app.py
 sdk: gradio
 sdk_version: 4.44.1
