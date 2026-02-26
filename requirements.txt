@@ -5,5 +5,5 @@ sentence-transformers
 huggingface-hub
 transformers
 numpy<2
-gradio==4.19.2
+gradio
 pillow
