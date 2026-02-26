@@ -1,9 +1,9 @@
 torch
 torchvision
 torchaudio
-sentence-transformers==2.2.2
-huggingface-hub==0.19.3
-transformers==4.30.2
+sentence-transformers
+huggingface-hub
+transformers
 numpy<2
 gradio==4.19.2
 pillow
