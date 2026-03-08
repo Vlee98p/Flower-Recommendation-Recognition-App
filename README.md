@@ -68,7 +68,8 @@ The bouquet recommendation system uses **`all-MiniLM-L12-v2`** from Sentence Tra
 At inference time, the user's natural language query is encoded and compared against all flower embeddings using **cosine similarity**. The top 2 most semantically similar bouquets are returned as recommendations. No labeled training data is required — the model relies entirely on the semantic understanding built into the pre-trained transformer.
 
 ## Dataset
-`Flower Classification | 10 Classes |` dataset from Kaggle is used.
+Supervised Model: Modified [`Flower Classification | 10 Classes |`](https://www.kaggle.com/datasets/utkarshsaxenadn/flower-classification-5-classes-roselilyetc) dataset from Kaggle to only keep version 2 and removed `TFRecords` folder. 
+UnSupervised Model: [`Language of Flowers`](https://www.kaggle.com/datasets/jenlooper/language-of-flowers) dataset from from Kaggle is used.
 
 ## Results
 
