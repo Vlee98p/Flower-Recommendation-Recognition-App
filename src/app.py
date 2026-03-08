@@ -8,6 +8,7 @@ from torchvision import transforms
 import traceback
 from PIL import Image
 import os
+os.environ["HF_HOME"] = "/tmp/huggingface"
 
 # Load your models
 #sentence embedding
@@ -17,8 +18,17 @@ with open("config/flower_labels.json") as f:
 with open("config/flower_colour.json") as f:
     flower_colour = json.load(f)
 
-embedding_model = SentenceTransformer("all-MiniLM-L12-v2")
-class_embs = embedding_model.encode(flower_classes, convert_to_tensor=True)
+embedding_model = None
+class_embs = None
+
+def get_embedding_model():
+    global embedding_model, class_embs
+    if embedding_model is None:
+        embedding_model = SentenceTransformer("all-MiniLM-L12-v2")
+        class_embs = embedding_model.encode(flower_classes, convert_to_tensor=True)
+    return embedding_model, class_embs
+# embedding_model = SentenceTransformer("all-MiniLM-L12-v2")
+# class_embs = embedding_model.encode(flower_classes, convert_to_tensor=True)
 
 
 def recommend_bouquet(text):
@@ -163,4 +173,4 @@ with gr.Blocks(css="""
                             outputs=img_output
                         )
   
-demo.launch(allowed_paths=["assets/"])
+demo.launch(allowed_paths=["assets/"], share=True)
