@@ -100,8 +100,8 @@ def classify_flower(file_obj):
 
 
 # Add this near the top of your app.py
-gif_path_s = "/app/assets/Sunflowers.gif"
-gif_path_t = "/app/assets/Tulip.gif"
+gif_path_s = "assets/Sunflowers.gif"
+gif_path_t = "assets/Tulip.gif"
 
 with gr.Blocks(css="""
     .gradio-container {
@@ -163,4 +163,4 @@ with gr.Blocks(css="""
                             outputs=img_output
                         )
   
-demo.launch(allowed_paths=["/app/assets"])
+demo.launch(allowed_paths=["assets/"])
