@@ -10,7 +10,6 @@ from PIL import Image
 import os
 import base64
 
-
 os.environ["HF_HOME"] = "/tmp/huggingface"
 
 # Load your models
@@ -38,21 +37,15 @@ def recommend_bouquet(text):
     try:
         if not text.strip():
             return "Please describe your thoughts or occasion."
-        query_emb = embedding_model.encode(text, convert_to_tensor=True)
-
-        scores = torch.nn.functional.cosine_similarity(query_emb, class_embs)
-        print("scores shape:", scores.shape)
-
+        model, embs = get_embedding_model()
+        query_emb = model.encode(text, convert_to_tensor=True)
+        scores = torch.nn.functional.cosine_similarity(query_emb, embs)
         top2_idx = torch.topk(scores, k=2).indices.tolist()
-        print("top2_idx:", top2_idx)
-
         best_idx = top2_idx[0]
         second_idx = top2_idx[1]
-
         return (
             f"🌸 First option: {flower_classes[best_idx]}, colour: {flower_colour[best_idx]}\n\n"
             f"🌸 Second option: {flower_classes[second_idx]}, colour: {flower_colour[second_idx]}")
-
     except Exception as e:
         traceback.print_exc()
         return f"Internal error: {e}"
@@ -105,11 +98,6 @@ def gif_to_base64(path):
 gif_b64_s = gif_to_base64("assets/Sunflowers.gif")
 gif_b64_t = gif_to_base64("assets/Tulip.gif")
 
-
-# Add this near the top of your app.py
-gif_path_s = "assets/Sunflowers.gif"
-gif_path_t = "assets/Tulip.gif"
-
 with gr.Blocks(css="""
     .gradio-container {
         max-width: 700px !important;
@@ -121,22 +109,17 @@ with gr.Blocks(css="""
     
         gr.HTML(f'''
             <div style="position:relative; height:0;">
-                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:250px;">
-                <img src="/file={gif_path_t}" width="35" style="position:absolute; top:10px; left:300px;">
-
-                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:310px;">
-                <img src="/file={gif_path_t}" width="35" style="position:absolute; top:10px; left:360px;">
-
-                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:370px;">
-                <img src="/file={gif_path_t}" width="35" style="position:absolute; top:10px; left:420px;">
-
-                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:430px;">
-                <img src="/file={gif_path_t}" width="35" style="position:absolute; top:10px; left:480px;">
-
-                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:490px;">
-                <img src="/file={gif_path_t}" width="35" style="position:absolute; top:10px; left:540px;">
-
-                <img src="/file={gif_path_s}" width="80" style="position:absolute; top:-5px; left:550px;">
+                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:250px;">
+                <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:300px;">
+                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:310px;">
+                <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:360px;">
+                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:370px;">
+                <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:420px;">
+                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:430px;">
+                <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:480px;">
+                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:490px;">
+                <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:540px;">
+                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:550px;">
             </div>
         ''')
 
@@ -158,7 +141,7 @@ with gr.Blocks(css="""
 
             with gr.Tab("Image to Flower"):
                 #gr.HTML(f'<div style="text-align:center;"><img src="/file={gif_path}" width="100"></div>')
-                img_file = gr.File(file_types=["image"])
+                img_input = gr.Image(type="pil", label="Upload a flower image")
                 with gr.Row():
                     with gr.Column():
                         gr.Markdown("### Predicted flower")
@@ -166,8 +149,9 @@ with gr.Blocks(css="""
                         img_button = gr.Button("Identify Flower", variant="primary")
                         img_button.click(
                             fn=classify_flower,
-                            inputs=img_file,
+                            inputs=img_input,
                             outputs=img_output
                         )
   
 demo.launch(allowed_paths=["assets/"], share=True)
+
