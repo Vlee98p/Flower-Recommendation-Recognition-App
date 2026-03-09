@@ -8,6 +8,9 @@ from torchvision import transforms
 import traceback
 from PIL import Image
 import os
+import base64
+
+
 os.environ["HF_HOME"] = "/tmp/huggingface"
 
 # Load your models
@@ -81,32 +84,26 @@ transform = transforms.Compose([
                          [0.229, 0.224, 0.225])
 ])
 
-def classify_flower(file_obj):
+def classify_flower(image):
     try:
-        if file_obj is None:
+        if image is None:
             return "⚠️ **Please upload a flower image.**"
-
-        file_path = file_obj.name
-
-        # Try to open the image manually
-        try:
-            image = Image.open(file_path).convert("RGB")
-        except Exception:
-            return "❌ **This image format is not supported. Please upload a JPG or PNG file.**"
-
         img = transform(image).unsqueeze(0).float()
-
         with torch.no_grad():
             outputs = cnn_model(img)
             predicted_idx = outputs.argmax(dim=1).item()
-
         predicted_label = flower_classes[predicted_idx]
-
         return f"🌸 {predicted_label}"
-
     except Exception as e:
         traceback.print_exc()
         return f"❌ **Internal error:** {e}"
+
+def gif_to_base64(path):
+    with open(path, "rb") as f:
+        return "data:image/gif;base64," + base64.b64encode(f.read()).decode("utf-8")
+
+gif_b64_s = gif_to_base64("assets/Sunflowers.gif")
+gif_b64_t = gif_to_base64("assets/Tulip.gif")
 
 
 # Add this near the top of your app.py
