@@ -107,21 +107,21 @@ with gr.Blocks(css="""
 
     with gr.Column(scale=4):
     
-        gr.HTML(f'''
-            <div style="position:relative; height:0;">
-                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:250px;">
-                <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:300px;">
-                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:310px;">
-                <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:360px;">
-                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:370px;">
-                <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:420px;">
-                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:430px;">
-                <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:480px;">
-                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:490px;">
-                <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:540px;">
-                <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:550px;">
-            </div>
-        ''')
+        # gr.HTML(f'''
+        #     <div style="position:relative; height:0;">
+        #         <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:250px;">
+        #         <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:300px;">
+        #         <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:310px;">
+        #         <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:360px;">
+        #         <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:370px;">
+        #         <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:420px;">
+        #         <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:430px;">
+        #         <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:480px;">
+        #         <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:490px;">
+        #         <img src="{gif_b64_t}" width="35" style="position:absolute; top:10px; left:540px;">
+        #         <img src="{gif_b64_s}" width="80" style="position:absolute; top:-5px; left:550px;">
+        #     </div>
+        # ''')
 
         with gr.Tabs():
             with gr.Tab("Text to Bouquet"):
